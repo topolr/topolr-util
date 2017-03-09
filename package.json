@@ -1,21 +1,28 @@
 {
   "name": "topolr-util",
-  "version": "0.2.0",
-  "description": "topolr server-side lib ",
+  "version": "1.0.0",
+  "description": "topolr server side util library ",
   "main": "topolr.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://git.oschina.net/hou80houzhu/topolr-util.git"
+    "url": "https://github.com/topolr/topolr-util.git"
   },
   "keywords": [
     "topolr",
     "lib",
     "server-side"
   ],
-  "author": "hou80houzhu",
+  "author": {
+    "name": "WangJinliang(hou80houzhu)",
+    "email": "hou80houzhu@vip.qq.com"
+  },
+  "bugs": {
+    "url": "https://github.com/topolr/topolr-util/issues"
+  },
+  "homepage": "http://topolr.org",
   "license": "MIT",
   "devDependencies": {
     "cli-color": "^1.1.0"
