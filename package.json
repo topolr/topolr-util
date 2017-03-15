@@ -1,6 +1,6 @@
 {
   "name": "topolr-util",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "topolr server side util library ",
   "main": "topolr.js",
   "scripts": {
@@ -25,7 +25,6 @@
   "homepage": "http://topolr.org",
   "license": "MIT",
   "devDependencies": {
-    "cli-color": "^1.1.0"
   },
   "dependencies": {
     "cli-color": "^1.1.0"
