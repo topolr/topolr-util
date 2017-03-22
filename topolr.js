@@ -315,6 +315,9 @@ queue.prototype.end = function (a) {
     this.reset();
     return this;
 };
+queue.prototype.pass=function() {
+    this.list.shift();
+};
 queue._fire = function (result) {
     if (this.list.length > 0) {
         var a = this.list.shift(), ths = this;
@@ -482,21 +485,13 @@ var promise = function (task) {
     this._isfinalerror = false;
     var ths = this;
     this._queue.complete(function (r) {
-        if(ths._state === 1) {
-            var t = ths;
-            while (t) {
-                t._isfinalerror = true;
-                t = t._parent;
-            }
-        }
-        if(ths._isfinalerror){
-            ths._error && ths._error.call(ths._scope, r,ths._state===0);
-        }else{
+        if (ths._state === 1) {
+            ths._error && ths._error.call(ths._scope, r);
+        } else {
             ths._complete && ths._complete.call(ths._scope, r);
         }
         ths._always && ths._always.call(ths._scope, r, {
-            state:ths._state,
-            error:ths._isfinalerror
+            state: ths._state
         });
         ths._finally && ths._finally.call(ths._scope, r, ths._state);
     });
@@ -543,6 +538,10 @@ promise.prototype._done = function (fnt) {
                 if (a&&a.then&&a._done) {
                     a._parent = ths;
                     a._finally = function (r) {
+                        if(a._state===1){
+                            ths._state=a._state;
+                            ths._queue.pass();
+                        }
                         ths._queue.next(r);
                     };
                 } else {
