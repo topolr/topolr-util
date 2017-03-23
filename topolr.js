@@ -481,8 +481,6 @@ var promise = function (task) {
     this._always = null;
     this._error = null;
     this._notify = null;
-    this._finalerror = null;
-    this._isfinalerror = false;
     var ths = this;
     this._queue.complete(function (r) {
         if (ths._state === 1) {
@@ -536,7 +534,6 @@ promise.prototype._done = function (fnt) {
             if (fn) {
                 var a = fn.call(ths._scope, n);
                 if (a&&a.then&&a._done) {
-                    a._parent = ths;
                     a._finally = function (r) {
                         if(a._state===1){
                             ths._state=a._state;
@@ -567,7 +564,6 @@ promise.prototype._fail = function (fnt) {
             if (fn) {
                 var a = fn.call(ths._scope, n);
                 if (a&&a.then&&a._done) {
-                    a._parent = ths;
                     a._finally = function (r) {
                         ths._queue.next(r);
                     };
@@ -678,6 +674,20 @@ file.copy = function (from, to) {
         ps.reject(err);
     });
     return ps;
+};
+file.makedir=function(path) {
+    var dirpath = Path.normalize(path).replace(/\\/g,"/");
+    if (!fs.existsSync(dirpath)) {
+        var a = dirpath.split("/");
+        var pathtmp = a[0]===""?"/":"";
+        for (var i = 0; i < a.length; i++) {
+            pathtmp += a[i];
+            if (!fs.existsSync(pathtmp)) {
+                fs.mkdirSync(pathtmp);
+            }
+            pathtmp += Path.sep;
+        }
+    }
 };
 file.prototype.remove = function () {
     var ps = topolr.promise(), path = this._path;
@@ -966,6 +976,10 @@ file.prototype.info=function() {
         }
     });
     return ps;
+};
+file.prototype.makedir=function() {
+    file.makedir(this._path);
+    return this;
 };
 topolr.file = function (path) {
     return new file(path);
